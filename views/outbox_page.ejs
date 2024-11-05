@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outboxes</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <% 
+        if (typeof userInfo === 'undefined') userInfo = {
+            'fullname': '',
+            'email': ''
+        };;
+        if (typeof emailList === 'undefined') emailList = [];
+        if (typeof pages === 'undefined') pages = 1;
+        %>
+    <nav>
+        <div id="fullname"><b><%= userInfo['fullname'] %></b></div>
+        <a id="logout" href="/logout">Log out</a>
+    </nav> 
+    <ul>
+        <li><a href="/compose">Compose</a></li>
+        <li><a href="/inbox/1">Inbox</a></li>
+        <li><a href="/outbox/1" class="active">Outbox</a></li>
+    </ul>
+    <div class="email-list">
+        <button id="deleteBtn">Delete Selected Email</button>
+        <p id="user_email" style="display: none;"><%= userInfo.email %></p>
+        <% for (let i = 0; i < emailList.length; i++) {%>
+            <div class="email" onclick="if(event.target.tagName !== 'INPUT') location.href='/details/<%= emailList[i].id %>'">
+                <input class="checkbox" type="checkbox">
+                <div class="name"><b><%= emailList[i].recipient %></b></div>
+                <div class="subject"><b><%= emailList[i].subject %></b></div>
+                <div class="time"><b><%= emailList[i].time %></b></div>
+                <p class="emailId" style="display: none;"><%= emailList[i].id %></p>
+            </div>
+        <%} %>
+        <div class="pages">
+            <a href="/outbox/<%= Number.parseInt(currentPage) == 1 ? 1 : Number.parseInt(currentPage) - 1 %>">&laquo;</a>
+            <% for (let i = 1; i <= pages; i++) {%>
+                <a class="<%= i == currentPage ? 'active' : '' %>" href="/outbox/<%= i %>"><%= i %></a>   
+            <%} %>
+            <a href="/outbox/<%= Number.parseInt(currentPage) == pages ? pages : Number.parseInt(currentPage) + 1 %>">&raquo;</a>
+          </div>
+    </div>
+    <script> 
+        const deleteBtn = document.getElementById('deleteBtn');
+        const user_email = document.getElementById('user_email').textContent;
+        deleteBtn.addEventListener('click', () => {
+            let checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            if(checkboxes.length > 0){
+                let confirmDelete = confirm("Are you sure to delete all selected emails?");
+                let deleteList = [];
+                if(confirmDelete) {
+                    checkboxes.forEach(checkbox => {
+                        const email = checkbox.parentElement;
+                        const emailId = email.children[email.children.length - 1].textContent;
+                        deleteList.push(emailId);
+                        email.remove();
+                    })
+                    const data = new URLSearchParams();
+                        data.append('source', 'outbox');
+                        data.append('userEmail', user_email);
+                        data.append('emailToDelete', JSON.stringify(deleteList))
+                        fetch('/delete', {
+                            method: 'POST',
+                            body: data
+                        })
+                        .then(response => response.text())
+                        .then(data => alert(data))
+                        .catch(error => alert("Something went wrong!!!"));
+                }
+            } else {
+                alert("No Email Selected to Delete!!!")
+            }
+        })
+    </script>
+</body>
+</html>

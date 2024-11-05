@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Details</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <style>
+        .email-details {
+            margin: 25px 15px 15px 175px;
+        }
+        textarea {
+            display: block;
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border-radius: 0%;
+            border: solid;
+            height: 400px;
+        }
+        .button {
+            padding: 10px 20px;
+            text-decoration: none;
+            border: solid black;
+            background-color: #04AA6D;
+            color: whitesmoke;
+        }
+        .button:hover {
+            background-color: gray;
+        }
+    </style>
+    <% 
+        if (typeof userInfo === 'undefined') userInfo = {
+            'fullname': '',
+            'email': ''
+        };
+        if (typeof content === 'undefined') content = {
+            'subject': '',
+            'body': '',
+            'file': '',
+            'created_at': ''
+        };
+        if (typeof contactData === 'undefined') contactData = {
+            'sender_email': '',
+            'sender_fullname': '',
+            'recipient_email': '',
+            'recipient_fullname': ''
+        };
+        %>
+    <nav>
+        <div id="fullname"><b><%= userInfo['fullname'] %></b></div>
+        <a id="logout" href="/logout">Log out</a>
+    </nav> 
+    <ul>
+        <li><a href="/compose">Compose</a></li>
+        <li><a href="/inbox/1">Inbox</a></li>
+        <li><a href="/outbox/1">Outbox</a></li>
+    </ul>
+    <div class="email-details">
+        <h2>Title: <%= content['subject'] %></h2>
+        <hr>
+        <p><b>From: </b><%= contactData['sender_email'] + ' - ' + contactData['sender_fullname'] %></p>
+        <p><b>To: </b><%= contactData['recipient_email'] + ' - ' + contactData['recipient_fullname'] %></p>
+        <p><b>At: </b><%= content['created_at'] %></p>
+        <hr>
+        <h3>Email Content:</h3>
+        <textarea readonly><%= content['body'] %></textarea>
+        <hr>
+        <h3>Attachment:</h3>
+        <% if (content['file'] == '' || content['file'] == undefined ) { %>
+            <p><i>(This email does not have Attachment)</i></p>
+        <%} else { %>
+            <a href="/download/?filePath=<%= encodeURIComponent(content['file']) %>" class="button" target="_blank">Download</a>
+        <%} %>
+    </div>
+    <script>
+        // let button = document.querySelector('button');
+        // let link = document.getElementById('download-link').value;
+        // const data = new URLSearchParams();
+        // data.append('filePath', link);
+        // console.log(link);
+        // console.log(data.get('filePath'));
+        // button.addEventListener('click', async () => {
+        //     console.log('ok')
+        //     await fetch('/download', {
+        //         method: 'POST',
+        //         body: data
+        //     })
+        //     .catch(error => alert("Something went wrong!!!"));
+        // })
+    </script>
+</body>
+</html>

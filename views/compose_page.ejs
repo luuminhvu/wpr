@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compoose</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<style>
+.compose-form {
+    margin: 15px 15px 15px 175px;
+}
+form {
+    min-width: 350px;
+    width: 100%;
+}
+input {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border-radius: 0%;
+    height: 50px;
+}
+select {
+    display: block;
+    width: 50%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border-radius: 0%;
+    border: solid;
+    height: 30px;
+}
+textarea {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border-radius: 0%;
+    border: solid;
+    height: 250px;
+}
+button {
+    width: 100%;
+    height: 50px;
+    background-color: #04AA6D;
+    color: whitesmoke;
+}
+button:hover {
+    background-color: gray;
+    color: whitesmoke;
+}
+.success {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+        background-color: goldenrod;
+        color: whitesmoke;
+}
+.err {
+        color: crimson;
+        margin-top: 15px;
+        margin-bottom: 15px;
+}
+</style>
+    <% 
+        if (typeof userInfo === 'undefined') err = {};
+        if (typeof recipients === 'undefined') recipients = {};
+        if (typeof status === 'undefined') status = '';
+        if (typeof err === 'undefined') err = '';
+        if (typeof params === 'undefined') params = {
+            'subject': '',
+            'body': ''
+        };
+    %>
+    <nav>
+        <div id="fullname"><b><%= userInfo['fullname'] %></b></div>
+        <a id="logout" href="/logout">Log out</a>
+    </nav> 
+    <ul>
+        <li><a href="/compose" class="active">Compose</a></li>
+        <li><a href="/inbox/1">Inbox</a></li>
+        <li><a href="/outbox/1">Outbox</a></li>
+    </ul>
+    <div class="compose-form">
+        <form action="/compose" method="post" enctype="multipart/form-data">
+            <div>
+                <%- status %>
+                <input style="display: none;" type="text" name="sender" id="sender" value="<%= userInfo.id %>">
+                <label for="recipient"><b>Recipient</b></label>
+                <select name="recipient" id="recipient">
+                    <option value="0">Select an Email to send</option>
+                    <% for(let i = 0; i < recipients.length; i++) { %>
+                        <option value="<%= recipients[i]['id'] %>"><%= recipients[i]['email'] %></option>
+                    <%} %>
+                </select>
+                <p class="err"><%= err %></p>
+                <label for="subject"><b>Title</b></label>
+                <input type="text" name="subject" id="subject" placeholder="Enter Email Subject" value="<%= params['subject'] %>">
+                <label for="body"><b>Content</b></label>
+                <textarea name="body" id="body"><%= params['body'] %></textarea>
+                <label for="file"><b>Attach File</b></label>
+                <input type="file" name="file" id="file">
+                <button type="submit">Send Email</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

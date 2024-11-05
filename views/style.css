@@ -1,0 +1,115 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+}
+nav {
+    width: 100%;
+    background-color: #04AA6D;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#fullname {
+    display: inline;
+    margin-left: 20px;
+    color: whitesmoke;
+}
+#logout {
+    display: inline;
+    margin-right: 20px;
+    color: whitesmoke;
+    text-decoration: none;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: black;
+}
+#logout:hover {
+    background-color: gray;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 10px 0;
+    width: 150px;
+    height: 100%;
+    position: fixed;
+    background-color: #f1f1f1;
+}
+li a {
+  display: block;
+  color: #000;
+  padding: 15px 15px;
+  text-decoration: none;
+}
+li a.active {
+    background-color: #04AA6D;
+    color: whitesmoke;
+}
+li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+.email-list {
+    margin: 15px 15px 15px 175px;
+}
+.email{
+    background-color: #f1f1f1;
+    height: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.email:hover {
+    background-color: gray;
+}
+.checkbox {
+    margin-left: 20px;
+    display: inline-block;
+}
+.name {
+    display: inline-block;
+    margin-left: 20px;
+    width: 200px;
+}
+.subject {
+    display: inline-block;
+    max-width: 50%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-left: 20px;
+}
+.time {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: 20px;
+}
+.pages {
+  display: flex;
+  justify-content: center;
+}
+
+.pages a {
+  color: black;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+.pages a.active {
+  background-color: #04AA6D;
+  color: whitesmoke;
+}
+
+.pages a:hover:not(.active) {background-color: #ddd;}
+
+#deleteBtn {
+    background-color: rgb(135, 6, 6);
+    color: whitesmoke;
+    padding: 15px 15px;
+    margin-bottom: 15px;
+}
+#deleteBtn:hover {
+    background-color: gray;
+}   
