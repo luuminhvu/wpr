@@ -88,7 +88,7 @@ button:hover {
         <form action="/compose" method="post" enctype="multipart/form-data">
             <div>
                 <%- status %>
-                <input style="display: none;" type="text" name="sender" id="sender" value="<%= userInfo.id %>">
+                <input type="text" name="sender" id="sender" value="<%= userInfo.id %>">
                 <label for="recipient"><b>Recipient</b></label>
                 <select name="recipient" id="recipient">
                     <option value="0">Select an Email to send</option>
