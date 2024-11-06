@@ -4,23 +4,29 @@ const mysql = require('mysql2');
 const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const fs = require('fs');
+const { error } = require('console');
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
-const uplpoad = multer({dest: 'uploads/' });
+const upload = multer({dest: 'uploads/' });
 const connection = mysql.createConnection({
-    user: 'wpr',
-    password: 'fit2024',
+    user: 'root',
+    password: '23092004',
     host: 'localhost',
-    port: 3306
+    port: 3306,
+    database:"test"
 });
 
 app.get('/', (req, res) => {
     if(req.cookies.login ==='true') {
         res.redirect('/inbox/1')
     } else {
-        res.render('sign_in_page');
+        res.render('sign_in_page',{
+            error:"",
+            message:""
+        }
+    )
     }
 });
 
@@ -61,11 +67,48 @@ app.post('/', async (req, res) => {
         params: params
     })
 })
+app.post('/login',async (req,res)=>{
+    const email = req.body.email;
+    const password = req.body.password;
+    if(!email || !password){
+        res.render("sign_in_page",{
+            error:"Must Password Or Email",
+            message:"",
+        }
+    )
+    }
+    const [rows] = await connection.promise().query('SELECT email, password FROM users WHERE email = ?',[email])
+    if(rows.length > 0){
+        if(rows[0].password= password){
+            res.cookie('email', email);
+            res.cookie('login', 'true');
+            res.redirect('/inbox/1');
+        }
+        else{
+            res.render("sign_in_page",{
+                error:"Must Password Or Email",
+                message:"",
+            }
+        )
+        }
+    }
+    else{
+        res.render("sign_in_page",{
+            error:"Must Password Or Email",
+            message:"",
+        }
+    )
+    }
+
+})
 
 
 app.get('/signup', (req, res) => {
-    res.render('sign_up_page');
-})
+    res.render('sign_up_page', {
+        error:"",
+        message:""
+    });
+});
 
 app.post('/signup', async (req, res) => {
     let email = req.body.email;
@@ -80,9 +123,9 @@ app.post('/signup', async (req, res) => {
         'email': email,
         'password': password,
         'repassword': repassword,
-        'fullname': fullname,   
+        'fullname': fullname,
     }
-    let forErr = {
+    let formErr = {
         'email': undefined,
         'password': undefined,
         'repassword': undefined,
@@ -137,8 +180,9 @@ app.get('/inbox/:page', async (req, res) => {
         let extractUserInfo = `SELECT email, fullname, inbox, outbox FROM users WHERE email = '${email}'`;
         let extractInbox = `SELECT id, sender_id, subject, date_format(created_at, "%d/%m/%Y %H:%i") AS created_at FROM emails WHERE id = ?`;
         let [row] = await connection.promise().query(extractUserInfo);
+        console.log(row)
         let inboxes = JSON.parse(row[0]['inbox']);
-        if(inboxes == undefined) {
+        if(inboxes == undefined ) {
            inboxes = [];
     }
 

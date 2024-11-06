@@ -11,12 +11,11 @@
     <div class="container">
         <h2>Sign Up</h2>
 
-        <% if (error) { %>
+        <%   if (error) { %>
             <p class="error" style="color: red;">
                 <%= error %>
             </p>
             <% } %>
-
                 <form action="/signup" method="post">
                     <input type="text" name="fullname" placeholder="Full Name" required>
                     <input type="email" name="email" placeholder="Email" required>
